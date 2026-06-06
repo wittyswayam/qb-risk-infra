@@ -24,7 +24,7 @@ RUN pip install --upgrade pip==24.0 && \
 # ============================================================
 FROM python:3.12-slim AS runtime
 
-LABEL maintainer="samrat yaduvanshi <kumarsamrat408@gmail.com>"
+LABEL maintainer="samrat swayam <kumarsamrat408@gmail.com>"
 LABEL org.opencontainers.image.title="qb-risk-infra"
 LABEL org.opencontainers.image.description="Quantitative Backtesting & Risk Analytics API"
 LABEL org.opencontainers.image.version="1.0.0"
