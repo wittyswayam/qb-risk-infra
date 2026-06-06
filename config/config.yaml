@@ -1,0 +1,77 @@
+env: development
+debug: false
+
+database:
+  host: localhost
+  port: 5432
+  name: qb_risk
+  user: postgres
+  password: ""
+  pool_size: 10
+  max_overflow: 20
+
+redis:
+  host: localhost
+  port: 6379
+  db: 0
+  ttl_seconds: 3600
+
+ingestion:
+  data_dir: data/raw
+  missing_value_strategy: ffill
+  max_gap_days: 5
+  api_timeout_seconds: 30
+
+backtest:
+  initial_capital: 100000.0
+  commission_bps: 5.0
+  slippage_bps: 2.0
+  risk_free_rate: 0.04
+  trading_days_per_year: 252
+  max_position_size: 0.25
+  allow_short: false
+
+walk_forward:
+  train_window_days: 252
+  test_window_days: 63
+  step_days: 21
+  min_train_samples: 100
+  param_stability_threshold: 0.3
+
+monte_carlo:
+  n_simulations: 1000
+  simulation_horizon_days: 252
+  confidence_levels:
+    - 0.95
+    - 0.99
+  shock_scenarios:
+    - name: mild_correction
+      return_shock: -0.05
+      vol_multiplier: 1.5
+    - name: market_crash
+      return_shock: -0.20
+      vol_multiplier: 2.5
+    - name: severe_stress
+      return_shock: -0.35
+      vol_multiplier: 3.5
+  random_seed: 42
+
+risk:
+  var_confidence: 0.95
+  cvar_confidence: 0.95
+  rolling_window_days: 21
+  benchmark_symbol: SPY
+  min_periods: 20
+
+api:
+  host: 0.0.0.0
+  port: 8000
+  reload: false
+  log_level: info
+  cors_origins:
+    - "*"
+
+logging:
+  level: INFO
+  format: json
+  file: logs/app.log

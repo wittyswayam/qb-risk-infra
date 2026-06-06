@@ -1,0 +1,41 @@
+# Core framework
+fastapi>=0.111.0,<0.112
+uvicorn[standard]>=0.30.0,<0.31
+
+# Data & numerics
+numpy>=1.26.0,<2.0
+pandas>=2.2.0,<3.0
+scipy>=1.13.0,<2.0
+scikit-learn>=1.5.0,<2.0
+
+# Configuration & environment
+pydantic>=2.7.0,<3.0
+pydantic-settings>=2.3.0,<3.0
+python-dotenv>=1.0.0,<2.0
+PyYAML>=6.0.1,<7.0
+
+# Database
+sqlalchemy>=2.0.30,<3.0
+psycopg2-binary>=2.9.9,<3.0
+alembic>=1.13.1,<2.0
+
+# Cache
+redis>=5.0.4,<6.0
+
+# HTTP client
+httpx>=0.27.0,<0.28
+requests>=2.32.0,<3.0
+
+# Visualisation / Dashboard
+plotly>=5.22.0,<6.0
+streamlit>=1.35.0,<2.0
+
+# Explainability (optional, gracefully degraded)
+# shap>=0.45.0,<0.46
+
+# Logging helpers
+loguru>=0.7.2,<0.8
+
+# Utilities
+python-dateutil>=2.9.0
+pytz>=2024.1
