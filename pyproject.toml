@@ -10,7 +10,7 @@ readme = "README.md"
 requires-python = ">=3.11"
 license = { text = "MIT" }
 authors = [
-    { name = "samrat yaduvanshi", email = "kumarsamrat408@gmail.com" }
+    { name = "samrat swayam", email = "kumarsamrat408@gmail.com" }
 ]
 keywords = ["quantitative finance", "backtesting", "risk analytics", "Monte Carlo"]
 classifiers = [
