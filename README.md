@@ -58,11 +58,7 @@ The domain modules (`strategies`, `backtesting`, `montecarlo`, `risk`) have no k
 
 **Proportional cost model.** Commission and slippage are specified in basis points of gross notional. This is the standard representation used in institutional desks and makes costs easy to calibrate from broker disclosures. One basis point is 0.01%.
 
-**Strategy interface contract.** Every strategy implements `on_bar(symbol, history, current_bar) -> Signal`. The signal carries a direction (+1, 0, -1), a normalised strength scalar, and an optional metadata dict for diagnostics. The engine is agnostic to strategy internals — it only consumes the signal. Adding a new strategy requires implementing `BaseStrategy` and registering it in the registry.
-
 **Repository pattern.** Database access is encapsulated in repository classes (`OHLCVRepository`, `BacktestRepository`, `WalkForwardRepository`). These accept a SQLAlchemy `Session` and return domain objects or raise `RepositoryError`. The API routes obtain sessions via a context manager. Business logic never constructs SQL queries.
-
-**Configuration hierarchy.** Settings are loaded from a YAML file, then overridden by environment variables using a double-underscore nesting convention (`QB__DATABASE__HOST`). The `AppConfig` Pydantic model validates all values at startup. Secrets (passwords, API keys) are never stored in YAML — only in environment variables or `.env`.
 
 ---
 
@@ -333,14 +329,6 @@ Tests use deterministic random seeds and synthetic data generated inline. No ext
 
 **Proportional cost model.** The slippage model assumes slippage scales linearly with price, independent of trade size and market liquidity. This is a reasonable approximation for liquid large-cap equities at modest position sizes. Market impact is not modelled.
 
-**GBM synthetic data.** The sample data generator uses geometric Brownian motion with constant drift and volatility. Real market returns exhibit volatility clustering, fat tails, and regime changes that GBM does not capture. Use real data for any conclusions that matter.
-
-**Parametric MC assumptions.** The parametric Monte Carlo mode assumes normality. The block bootstrap mode is more realistic for real return series but still assumes stationarity within the sampling window.
-
-**No margin or borrowing costs.** Short positions (when enabled) are modelled without margin requirements or stock borrow costs. These can materially affect short-selling strategy performance in practice.
-
-**Walk-forward grid search.** In-sample optimisation uses Sharpe ratio as the objective. The grid is discrete and user-specified; there is no gradient-based or Bayesian optimisation. For large parameter spaces, the grid approach is computationally expensive.
-
 ---
 
 ## Extending the System
@@ -350,10 +338,6 @@ Tests use deterministic random seeds and synthetic data generated inline. No ext
 **Adding a new ingestion adapter.** Subclass `BaseIngestionAdapter` in `src/ingestion/`, implement `fetch` and `available_symbols`. Pass the adapter instance to `BacktestEngine.run` or the API route handler.
 
 **Adding a new API route.** Create a router file in `src/api/routes/`, define endpoints, and include the router in `src/api/main.py`. Add corresponding Pydantic schemas to `src/api/schemas.py`.
-
-**Persistent equity curves.** Currently, equity curve data is computed in memory and not stored in the database (only aggregate metrics are persisted). To support querying historical equity curves, add a time-series table to `src/db/models.py` and update `BacktestRepository.save` to insert snapshots. A dedicated time-series store (TimescaleDB, InfluxDB) would be more efficient at scale.
-
-**Multiple assets.** The portfolio module tracks positions by symbol and supports multiple concurrent positions. Extending the backtesting engine to accept a multi-symbol data dict and run strategies per symbol with shared portfolio state is a straightforward refactor.
 
 ---
 
